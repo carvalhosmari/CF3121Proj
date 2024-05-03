@@ -29,15 +29,29 @@ def calcula_parametros_funcao_onda(largura_caixa, num_quantico):
     amplitude = math.sqrt((2) / (largura_caixa * 1E-9))
     num_onda = (num_quantico * pi) / (largura_caixa * 1E-9)
 
-    x = np.linspace(0, num_onda * (largura_caixa * 1E-9))
+    return amplitude, num_onda
 
-    funcao_onda = amplitude * np.sin(x)
+def plota_graficos_func_onda(amplitude_ni, amplitude_nf, num_onda_ni, num_onda_nf, largura_caixa, n_inicial, n_final):
+    x = np.linspace(0, (largura_caixa * 1E-9), 150)
 
-    print(f"dentro func: {amplitude} / {num_onda}")
-    print(f"dentro func: {(2/(largura_caixa * 1E-9))} / {num_quantico * pi}")
+    fig, eixo = plt.subplots(1,2, sharey = True, figsize=(12,6))
 
-    return funcao_onda, amplitude, num_onda
+    eixo[0].set_xlabel("x (m)", fontsize=16)
+    eixo[1].set_xlabel("x (m)", fontsize=16)
+    eixo[0].set_ylabel("Ψ₁", fontsize=16)
+    eixo[1].set_ylabel("Ψ₂", fontsize=16)
 
+    funcao_onda_ni = amplitude_ni * np.sin(num_onda_ni * x)
+    funcao_onda_nf = amplitude_nf * np.sin(num_onda_nf * x)
+
+    plot_func_ni, = eixo[0].plot(x, funcao_onda_ni)
+    plot_func_nf, = eixo[1].plot(x, funcao_onda_nf)
+
+    eixo[0].set_title(f"n = {n_inicial}")
+    eixo[1].set_title(f"n = {n_final}")
+
+    plt.savefig("graficos/grafico_funcao_onda.pdf")
+    
 def calcula_energia_particula(largura_caixa, num_quantico, tipo_particula):
     energia_joule = (math.pow(num_quantico, 2) * math.pow(cte_plank_joule, 2)) / (8 * math.pow(largura_caixa * 1E-9, 2) * massa_eletron)
 
@@ -102,10 +116,10 @@ def main():
 
             tipo_particula = int(input("particula a ser confinada:\n\t1 - eletron\n\t2 - proton\nopcao:"))
 
-            f_onda_ni, amplitude_ni, num_onda_ni = calcula_parametros_funcao_onda(largura_caixa, n_inicial)
-            f_onda_nf, amplitude_nf, num_onda_nf = calcula_parametros_funcao_onda(largura_caixa, n_final)
+            amplitude_ni, num_onda_ni = calcula_parametros_funcao_onda(largura_caixa, n_inicial)
+            amplitude_nf, num_onda_nf = calcula_parametros_funcao_onda(largura_caixa, n_final)
 
-            print(amplitude_ni, num_onda_ni)
+            plota_graficos_func_onda(amplitude_ni, amplitude_nf, num_onda_ni, num_onda_nf, largura_caixa, n_inicial, n_final)
 
             print(f"funcoes de onda:\n\tni: Ψ₁(x) = {amplitude_ni:.2E}sin({num_onda_ni:.2E}x)\n\tnf: Ψ₂(x) = {amplitude_nf:.2E}sin({num_onda_nf:.2E}x)")
 
