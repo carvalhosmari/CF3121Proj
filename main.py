@@ -13,7 +13,7 @@ def imprime_tela_inicial():
     print("\n***********************************************************************************")
     print("**************** SIMULADOR CONFINAMENTO DE PARTICULAS EM UMA CAIXA ****************")
     print("***********************************************************************************")
-    
+
     print("\nAutoria: Mariane S. Carvalho\tTurma: 610")
 
     print("\n--------------------------------------------------------------------------------------------------------------\n")
@@ -51,13 +51,34 @@ def plota_graficos_func_onda(amplitude_ni, amplitude_nf, num_onda_ni, num_onda_n
     eixo[1].set_title(f"n = {n_final}")
 
     plt.savefig("graficos/grafico_funcao_onda.pdf")
+
+def plota_graficos_distr_probabilidade(amplitude_ni, amplitude_nf, num_onda_ni, num_onda_nf, largura_caixa, n_inicial, n_final):
+    x = np.linspace(0, (largura_caixa * 1E-9), 150)
+
+    fig, eixo = plt.subplots(1,2, sharey = True, figsize=(12,6))
+
+    eixo[0].set_xlabel("x (m)", fontsize=16)
+    eixo[1].set_xlabel("x (m)", fontsize=16)
+    eixo[0].set_ylabel("|Ψ₁|²", fontsize=16)
+    eixo[1].set_ylabel("|Ψ₂|²", fontsize=16)
+
+    func_distr_probab_ni = (amplitude_ni * np.sin(num_onda_ni * x) ** 2)
+    func_distr_probab_nf = (amplitude_nf * np.sin(num_onda_nf * x) ** 2)
+
+    plot_func_ni, = eixo[0].plot(x, func_distr_probab_ni)
+    plot_func_nf, = eixo[1].plot(x, func_distr_probab_nf)
+
+    eixo[0].set_title(f"n = {n_inicial}")
+    eixo[1].set_title(f"n = {n_final}")
+
+    plt.savefig("graficos/grafico_distr_probab.pdf")
     
 def calcula_energia_particula(largura_caixa, num_quantico, tipo_particula):
     energia_joule = (math.pow(num_quantico, 2) * math.pow(cte_plank_joule, 2)) / (8 * math.pow(largura_caixa * 1E-9, 2) * massa_eletron)
 
     # se particula confinada for proton
     if tipo_particula == 2:
-        energia_joule = (math.pow(num_quantico, 2) * math.pow(cte_plank_joule, 2)) / (8 * math.pow(largura_caixa * 1E-9, 2) * massa_proton)        
+        energia_joule = (math.pow(num_quantico, 2) * math.pow(cte_plank_joule, 2)) / (8 * math.pow(largura_caixa * 1E-9, 2) * massa_proton)
 
     return energia_joule
 
@@ -66,7 +87,7 @@ def calcula_energia_foton(num_quantico_inicial, num_quantico_final, tipo_particu
     # se n_inicial < n_final: foton absorvido
     energia_inicial = calcula_energia_particula(largura_caixa, num_quantico_inicial, 1)
     energia_final = calcula_energia_particula(largura_caixa, num_quantico_final, 1)
-    
+
     if tipo_particula == 2:
         energia_inicial = calcula_energia_particula(largura_caixa, num_quantico_inicial, 2)
         energia_final = calcula_energia_particula(largura_caixa, num_quantico_final, 2)
@@ -100,8 +121,8 @@ def calcula_comprimento_onda_broglie(velocidade, massa_particula):
     return compr
 def main():
     imprime_tela_inicial()
-    
-    while True: 
+
+    while True:
         menu_nav()
 
         opcao = int(input("\nopcao escolhida: "))
@@ -121,16 +142,18 @@ def main():
 
             plota_graficos_func_onda(amplitude_ni, amplitude_nf, num_onda_ni, num_onda_nf, largura_caixa, n_inicial, n_final)
 
+            plota_graficos_distr_probabilidade(amplitude_ni, amplitude_nf, num_onda_ni, num_onda_nf, largura_caixa, n_inicial, n_final)
+
             print(f"funcoes de onda:\n\tni: Ψ₁(x) = {amplitude_ni:.2E}sin({num_onda_ni:.2E}x)\n\tnf: Ψ₂(x) = {amplitude_nf:.2E}sin({num_onda_nf:.2E}x)")
 
             if tipo_particula == 1:
                 energia_ni_joule = calcula_energia_particula(largura_caixa, n_inicial, 1)
                 energia_nf_joule = calcula_energia_particula(largura_caixa, n_final, 1)
-                
+
                 print()
 
                 print(f"energia da particula:\n\tni: {energia_ni_joule:.2E} J ou {(energia_ni_joule / 1.602e-19):.2f} eV\n\tnf: {energia_nf_joule:.2E} J ou {(energia_nf_joule / 1.602e-19):.2f} eV")
-                
+
                 energia_foton = calcula_energia_foton(n_inicial, n_final, 1, largura_caixa)
                 tipo = "absorvido"
 
@@ -138,7 +161,7 @@ def main():
                     tipo = "emitido"
 
                 comp_onda, freq_foton = calcula_comprimento_onda_freq_foton(energia_foton)
-                
+
                 print()
 
                 print(f"dados do foton {tipo.upper()}: \n\tenergia: {energia_foton:.2E} J ou {(energia_foton / 1.602e-19):.2f} eV\n\tcomprimento de onda: {comp_onda:.2E} m\n\tfrequencia: {freq_foton:.2E} Hz")
@@ -159,11 +182,11 @@ def main():
             elif tipo_particula == 2:
                 energia_ni_joule = calcula_energia_particula(largura_caixa, n_inicial, 2)
                 energia_nf_joule = calcula_energia_particula(largura_caixa, n_final, 2)
-                
+
                 print()
 
                 print(f"energia da particula:\n\tni: {energia_ni_joule:.2E} J ou {(energia_ni_joule / 1.602e-19):.2f} eV\n\tnf: {energia_nf_joule:.2E} J ou {(energia_nf_joule / 1.602e-19):.2f} eV")
-                
+
                 energia_foton = calcula_energia_foton(n_inicial, n_final, 2, largura_caixa)
                 tipo = "absorvido"
 
@@ -171,11 +194,11 @@ def main():
                     tipo = "emitido"
 
                 comp_onda, freq_foton = calcula_comprimento_onda_freq_foton(energia_foton)
-                
+
                 print()
 
                 print(f"dados do foton {tipo.upper()}: \n\tenergia: {energia_foton:.2E} J.s ou {(energia_foton / 1.602e-19):.2f} eV\n\tcomprimento de onda: {comp_onda:.2E} m\n\tfrequencia: {freq_foton:.2E} Hz")
-                
+
                 vel_i = calcula_velocidade_particula(energia_ni_joule, massa_proton)
                 vel_f = calcula_velocidade_particula(energia_nf_joule, massa_proton)
 
