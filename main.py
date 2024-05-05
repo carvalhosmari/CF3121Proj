@@ -52,6 +52,8 @@ def plota_graficos_func_onda(amplitude_ni, amplitude_nf, num_onda_ni, num_onda_n
 
     plt.savefig("graficos/grafico_funcao_onda.pdf")
 
+    plt.close()
+
 def plota_graficos_distr_probabilidade(amplitude_ni, amplitude_nf, num_onda_ni, num_onda_nf, largura_caixa, n_inicial, n_final):
     x = np.linspace(0, (largura_caixa * 1E-9), 150)
 
@@ -72,6 +74,8 @@ def plota_graficos_distr_probabilidade(amplitude_ni, amplitude_nf, num_onda_ni, 
     eixo[1].set_title(f"n = {n_final}")
 
     plt.savefig("graficos/grafico_distr_probab.pdf")
+    
+    plt.close()
     
 def calcula_energia_particula(largura_caixa, num_quantico, tipo_particula):
     energia_joule = (math.pow(num_quantico, 2) * math.pow(cte_plank_joule, 2)) / (8 * math.pow(largura_caixa * 1E-9, 2) * massa_eletron)
