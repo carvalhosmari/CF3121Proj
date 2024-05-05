@@ -136,8 +136,19 @@ def main():
             n_final = int(input("digite o numero quantico final da particula (nf): "))
             largura_caixa = float(input("digite a largura da caixa (L), em nanometros: "))
             print("digite as coordenadas de onde a particula sera procurada: ")
-            coord_a = int(input("coordenada a: "))
-            coord_b = int(input("coordenada b: "))
+            
+            while True:
+                coord_a = float(input("coordenada a, em nanometros: "))
+                if coord_a <= 0 or coord_a > largura_caixa:
+                    print("coordenada fora dos limites da caixa, por favor digite novamente.")
+                else:
+                    break
+            while True:
+                coord_b = float(input("coordenada b, em nanometros: "))
+                if coord_b <= 0 or coord_b > largura_caixa:
+                    print("coordenada fora dos limites da caixa, por favor digite novamente.")
+                else:
+                    break
 
             tipo_particula = int(input("particula a ser confinada:\n\t1 - eletron\n\t2 - proton\nopcao:"))
 
