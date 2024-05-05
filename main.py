@@ -74,7 +74,7 @@ def plota_graficos_distr_probabilidade(amplitude_ni, amplitude_nf, num_onda_ni, 
     eixo[1].set_title(f"n = {n_final}")
 
     plt.savefig("graficos/grafico_distr_probab.pdf")
-    
+
     plt.close()
     
 def calcula_energia_particula(largura_caixa, num_quantico, tipo_particula):
@@ -148,7 +148,7 @@ def main():
 
             plota_graficos_distr_probabilidade(amplitude_ni, amplitude_nf, num_onda_ni, num_onda_nf, largura_caixa, n_inicial, n_final)
 
-            print(f"funcoes de onda:\n\tni: Ψ₁(x) = {amplitude_ni:.2E}sin({num_onda_ni:.2E}x)\n\tnf: Ψ₂(x) = {amplitude_nf:.2E}sin({num_onda_nf:.2E}x)")
+            print(f"funcoes de onda:\n\tni: Ψ₁(x) = {amplitude_ni:.3G}sin({num_onda_ni:.3G}x)\n\tnf: Ψ₂(x) = {amplitude_nf:.3G}sin({num_onda_nf:.3G}x)")
 
             if tipo_particula == 1:
                 energia_ni_joule = calcula_energia_particula(largura_caixa, n_inicial, 1)
@@ -156,7 +156,7 @@ def main():
 
                 print()
 
-                print(f"energia da particula:\n\tni: {energia_ni_joule:.2E} J ou {(energia_ni_joule / 1.602e-19):.2f} eV\n\tnf: {energia_nf_joule:.2E} J ou {(energia_nf_joule / 1.602e-19):.2f} eV")
+                print(f"energia da particula:\n\tni: {energia_ni_joule:.3G} J ou {(energia_ni_joule / 1.602e-19):.3G} eV\n\tnf: {energia_nf_joule:.3G} J ou {(energia_nf_joule / 1.602e-19):.3G} eV")
 
                 energia_foton = calcula_energia_foton(n_inicial, n_final, 1, largura_caixa)
                 tipo = "absorvido"
@@ -168,28 +168,29 @@ def main():
 
                 print()
 
-                print(f"dados do foton {tipo.upper()}: \n\tenergia: {energia_foton:.2E} J ou {(energia_foton / 1.602e-19):.2f} eV\n\tcomprimento de onda: {comp_onda:.2E} m\n\tfrequencia: {freq_foton:.2E} Hz")
+                print(f"dados do foton {tipo.upper()}: \n\tenergia: {energia_foton:.3G} J ou {(energia_foton / 1.602e-19):.3G} eV\n\tcomprimento de onda: {comp_onda:.3G} m\n\tfrequencia: {freq_foton:.3G} Hz")
 
                 vel_i = calcula_velocidade_particula(energia_ni_joule, massa_eletron)
                 vel_f = calcula_velocidade_particula(energia_nf_joule, massa_eletron)
 
                 print()
 
-                print(f"velocidade da particula:\n\tni: {vel_i} m/s\n\tnf: {vel_f} m/s")
+                print(f"velocidade da particula:\n\tni: {vel_i:.3G} m/s\n\tnf: {vel_f:.3G} m/s")
 
                 compr_broglie_ni = calcula_comprimento_onda_broglie(vel_i, massa_eletron)
                 compr_broglie_nf = calcula_comprimento_onda_broglie(vel_f, massa_eletron)
 
                 print()
 
-                print(f"comprimento de onda de De Broglie:\n\tni: {compr_broglie_ni:.2E} m\n\tnf:{compr_broglie_nf:.2E} m")
+                print(f"comprimento de onda de De Broglie:\n\tni: {compr_broglie_ni:.3G} m\n\tnf:{compr_broglie_nf:.3G} m")
+
             elif tipo_particula == 2:
                 energia_ni_joule = calcula_energia_particula(largura_caixa, n_inicial, 2)
                 energia_nf_joule = calcula_energia_particula(largura_caixa, n_final, 2)
 
                 print()
 
-                print(f"energia da particula:\n\tni: {energia_ni_joule:.2E} J ou {(energia_ni_joule / 1.602e-19):.2f} eV\n\tnf: {energia_nf_joule:.2E} J ou {(energia_nf_joule / 1.602e-19):.2f} eV")
+                print(f"energia da particula:\n\tni: {energia_ni_joule:.3G} J ou {(energia_ni_joule / 1.602e-19):.3G} eV\n\tnf: {energia_nf_joule:.3G} J ou {(energia_nf_joule / 1.602e-19):.3G} eV")
 
                 energia_foton = calcula_energia_foton(n_inicial, n_final, 2, largura_caixa)
                 tipo = "absorvido"
@@ -201,21 +202,21 @@ def main():
 
                 print()
 
-                print(f"dados do foton {tipo.upper()}: \n\tenergia: {energia_foton:.2E} J.s ou {(energia_foton / 1.602e-19):.2f} eV\n\tcomprimento de onda: {comp_onda:.2E} m\n\tfrequencia: {freq_foton:.2E} Hz")
+                print(f"dados do foton {tipo.upper()}: \n\tenergia: {energia_foton:.3G} J.s ou {(energia_foton / 1.602e-19):.3G} eV\n\tcomprimento de onda: {comp_onda:.3G} m\n\tfrequencia: {freq_foton:.3G} Hz")
 
                 vel_i = calcula_velocidade_particula(energia_ni_joule, massa_proton)
                 vel_f = calcula_velocidade_particula(energia_nf_joule, massa_proton)
 
                 print()
 
-                print(f"velocidade da particula:\n\tni: {vel_i:.2E} m/s\n\tnf: {vel_f:.2E} m/s")
+                print(f"velocidade da particula:\n\tni: {vel_i:.3G} m/s\n\tnf: {vel_f:.3G} m/s")
 
                 compr_broglie_ni = calcula_comprimento_onda_broglie(vel_i, massa_proton)
                 compr_broglie_nf = calcula_comprimento_onda_broglie(vel_f, massa_proton)
 
                 print()
 
-                print(f"comprimento de onda de De Broglie:\n\tni: {compr_broglie_ni:.2E} m\n\tnf: {compr_broglie_nf:.2E} m")
+                print(f"comprimento de onda de De Broglie:\n\tni: {compr_broglie_ni:.3G} m\n\tnf: {compr_broglie_nf:.3G} m")
 
         elif opcao == 2:
             print("Para determinar parametros da caixa e da particula:")
