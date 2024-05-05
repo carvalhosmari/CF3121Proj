@@ -214,10 +214,16 @@ def main():
                 print(f"comprimento de onda de De Broglie:\n\tni: {compr_broglie_ni:.2E} m\n\tnf: {compr_broglie_nf:.2E} m")
 
         elif opcao == 2:
-            # testes
-            largura, num_quantico = calcula_parametros_caixa_particula(5.612e4, 29.68e19)
+            print("Para determinar parametros da caixa e da particula:")
 
-            print(f"{largura:.2E} / {num_quantico}")
+            input_amplitude = float(input("digite o valor da amplitude (A), em metros: "))
+            input_num_onda = float(input("digite o valor do numero de onda (k): "))
+
+            largura, num_quantico = calcula_parametros_caixa_particula(input_amplitude, input_num_onda)
+
+            print(f"largura da caixa: {largura:.3G} m")
+            print(f"nivel quantico: {round(num_quantico)}")
+
         elif opcao == 3:
             break
         else:
