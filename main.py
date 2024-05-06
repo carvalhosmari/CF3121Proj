@@ -20,9 +20,8 @@ def imprime_tela_inicial():
     print("Este projeto tem como objetivo: \n\n\t- Simular o confinamento de particulas quanticas levando a quantizacao dos niveis de energia da mesma; \n\t- Entender os conceitos de salto quantico, variacao de niveis de energia atraves da emissao e absorção de fotons; \n\t- Estudar a função de onda quantica independente do tempo e a funcao de distribuicao de probabilidade |Ψ(x,t)|²")
     print()
 
-    print("\n--------------------------------------------------------------------------------------------------------------")
-
 def menu_nav():
+    print("\n--------------------------------------------------------------------------------------------------------------")
     print("\nSelecione a entrada:\n\n\t1 - Determinar funcao de onda quantica e demais parametros;\n\t2 - Determinar parametros da particula e caixa a partir da funcao de onda\n\t3 - Encerrar programa")
 
 def calcula_parametros_funcao_onda(largura_caixa, num_quantico):
@@ -158,38 +157,19 @@ def main():
         opcao = int(input("\nopcao escolhida: "))
 
         if opcao == 1:
+            tipo_particula = int(input("\nparticula a ser confinada:\n\t1 - eletron\n\t2 - proton\nopcao: "))
+
+            largura_caixa = float(input("\ndigite a largura da caixa (L), em nanometros: "))
+            
             n_inicial = int(input("digite o numero quantico inicial da particula (ni): "))
             n_final = int(input("digite o numero quantico final da particula (nf): "))
-            largura_caixa = float(input("digite a largura da caixa (L), em nanometros: "))
-            print("digite as coordenadas de onde a particula sera procurada: ")
-            
-            while True:
-                coord_a = float(input("coordenada a, em nanometros: "))
-                if coord_a <= 0 or coord_a > largura_caixa:
-                    print("coordenada fora dos limites da caixa, por favor digite novamente.")
-                else:
-                    break
-            while True:
-                coord_b = float(input("coordenada b, em nanometros: "))
-                if coord_b <= 0 or coord_b > largura_caixa:
-                    print("coordenada fora dos limites da caixa, por favor digite novamente.")
-                else:
-                    break
-            
+        
             largura_caixa = converte_medida(largura_caixa, 'm')
-            coord_a = converte_medida(coord_a, 'm')
-            coord_b = converte_medida(coord_b, 'm')
-
-            tipo_particula = int(input("particula a ser confinada:\n\t1 - eletron\n\t2 - proton\nopcao:"))
 
             amplitude_ni, num_onda_ni = calcula_parametros_funcao_onda(largura_caixa, n_inicial)
             amplitude_nf, num_onda_nf = calcula_parametros_funcao_onda(largura_caixa, n_final)
 
-            plota_graficos_func_onda(amplitude_ni, amplitude_nf, num_onda_ni, num_onda_nf, largura_caixa, n_inicial, n_final)
-
-            plota_graficos_distr_probabilidade(amplitude_ni, amplitude_nf, num_onda_ni, num_onda_nf, largura_caixa, n_inicial, n_final)
-
-            print(f"funcoes de onda:\n\tni: Ψ₁(x) = {amplitude_ni:.3G}sin({num_onda_ni:.3G}x)\n\tnf: Ψ₂(x) = {amplitude_nf:.3G}sin({num_onda_nf:.3G}x)")
+            print(f"\nfuncoes de onda:\n\tni: Ψ₁(x) = {amplitude_ni:.3G}sin({num_onda_ni:.3G}x)\n\tnf: Ψ₂(x) = {amplitude_nf:.3G}sin({num_onda_nf:.3G}x)")
 
             if tipo_particula == 1:
                 energia_ni_joule = calcula_energia_particula(largura_caixa, n_inicial, 1)
@@ -268,14 +248,40 @@ def main():
 
                 print(f"comprimento de onda de De Broglie:\n\tni: {compr_broglie_ni:.3G} m ou {compr_broglie_ni_conv:.3G} nm\n\tnf: {compr_broglie_nf:.3G} m ou {compr_broglie_nf_conv:.3G} nm")
 
-            probab_ni = calculo_probab_dois_pontos(largura_caixa, n_inicial, coord_a, coord_b)
-            probab_nf = calculo_probab_dois_pontos(largura_caixa, n_final, coord_a, coord_b)
+            print("\ngostaria de calcular a probabilidade de encontrar a particula entre 2 pontos:\n\t1 - sim\n\t2 - nao")
+            opcao = int(input("opcao: "))
+            
+            if opcao == 1:
+                print("\ndigite as coordenadas de onde a particula sera procurada: ")
+                
+                while True:
+                    coord_a = float(input("coordenada a, em nanometros: "))
+                    coord_a = converte_medida(coord_a, 'm')
+                    if coord_a <= 0 or coord_a > largura_caixa:
+                        print("coordenada fora dos limites da caixa, por favor digite novamente.")
+                    else:
+                        break
+                while True:
+                    coord_b = float(input("coordenada b, em nanometros: "))
+                    coord_b = converte_medida(coord_b, 'm')
+                    if coord_b <= 0 or coord_b > largura_caixa:
+                        print("coordenada fora dos limites da caixa, por favor digite novamente.")
+                    else:
+                        break
 
-            print()
+                probab_ni = calculo_probab_dois_pontos(largura_caixa, n_inicial, coord_a, coord_b)
+                probab_nf = calculo_probab_dois_pontos(largura_caixa, n_final, coord_a, coord_b)
 
-            print(f"probabilidade de encontrar a particula entre a e b:\n\tni: {(probab_ni * 100):.3G}%\n\tnf: {(probab_nf * 100):.3G}%")
+                print()
+
+                print(f"probabilidade de encontrar a particula entre a e b:\n\tni: {(probab_ni * 100):.3G}%\n\tnf: {(probab_nf * 100):.3G}%")
+
+            plota_graficos_func_onda(amplitude_ni, amplitude_nf, num_onda_ni, num_onda_nf, largura_caixa, n_inicial, n_final)
+
+            plota_graficos_distr_probabilidade(amplitude_ni, amplitude_nf, num_onda_ni, num_onda_nf, largura_caixa, n_inicial, n_final)
+        
         elif opcao == 2:
-            print("Para determinar parametros da caixa e da particula:")
+            print("\npara determinar parametros da caixa e da particula")
 
             input_amplitude = float(input("digite o valor da amplitude (A), em metros: "))
             input_num_onda = float(input("digite o valor do numero de onda (k): "))
@@ -297,7 +303,7 @@ def main():
             ponto_px = posicao * largura
             probab = calculo_probab_unico_ponto(largura, num_quantico, ponto_px)
 
-            print(f"\nprobabilidade da particula estar em {posicao}*L: {probab:.3G} dx")
+            print(f"\nprobabilidade da particula estar em {posicao}*L: {probab:.3G}dx")
 
         elif opcao == 3:
             break
