@@ -134,6 +134,12 @@ def converte_medida(medida, tipo_conversao):
 
     return medida_convert
 
+def calculo_probab_unico_ponto(largura_caixa, num_quantico, ponto): 
+    
+    prob = (2 / largura_caixa) * (np.sin((num_quantico * pi / largura_caixa) * (ponto)) ** 2)
+
+    return prob
+
 def main():
     imprime_tela_inicial()
 
@@ -261,10 +267,22 @@ def main():
 
             largura, num_quantico = calcula_parametros_caixa_particula(input_amplitude, input_num_onda)
 
-            largura = converte_medida(largura, 'nm')
+            largura_conv_nm = converte_medida(largura, 'nm')
 
-            print(f"largura da caixa: {largura:.3G} nm")
-            print(f"nivel quantico: {round(num_quantico)}")
+            print(f"\nparametros da caixa e da particula:\n\tlargura da caixa: {largura:.3G} m ou {largura_conv_nm:.3G} nm\n\tnivel quantico: {round(num_quantico)}")
+            
+            while True:
+                posicao = float(input("\ndigite uma posicao [px]*L para determinar a probabilidade \nde a particula se encontrar nesta posicao: "))
+                
+                if (posicao * largura) > largura:
+                    print("\nposicao localizada fora das dimensoes da caixa. favor digitar novamente")
+                else:
+                    break
+            
+            ponto_px = posicao * largura
+            probab = calculo_probab_unico_ponto(largura, num_quantico, ponto_px)
+
+            print(f"\nprobabilidade da particula estar em {posicao}*L: {probab:.3G} dx")
 
         elif opcao == 3:
             break
