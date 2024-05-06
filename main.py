@@ -140,6 +140,15 @@ def calculo_probab_unico_ponto(largura_caixa, num_quantico, ponto):
 
     return prob
 
+def calculo_probab_dois_pontos(largura_caixa, num_quantico, ponto_a, ponto_b):
+    x = np.linspace(ponto_a, ponto_b, 200)
+
+    func_probab = (2 / largura_caixa) * (np.sin((num_quantico * pi / largura_caixa) * x) ** 2)
+
+    probab = np.trapz(func_probab, x)
+
+    return probab
+
 def main():
     imprime_tela_inicial()
 
@@ -257,8 +266,14 @@ def main():
 
                 print()
 
-                print(f"comprimento de onda de De Broglie:\n\tni: {compr_broglie_ni:.3G} m ou {compr_broglie_ni_conv:.3G} nm\n\tnf:{compr_broglie_nf:.3G} m ou {compr_broglie_nf_conv:.3G} nm")
+                print(f"comprimento de onda de De Broglie:\n\tni: {compr_broglie_ni:.3G} m ou {compr_broglie_ni_conv:.3G} nm\n\tnf: {compr_broglie_nf:.3G} m ou {compr_broglie_nf_conv:.3G} nm")
 
+            probab_ni = calculo_probab_dois_pontos(largura_caixa, n_inicial, coord_a, coord_b)
+            probab_nf = calculo_probab_dois_pontos(largura_caixa, n_final, coord_a, coord_b)
+
+            print()
+
+            print(f"probabilidade de encontrar a particula entre a e b:\n\tni: {(probab_ni * 100):.3G}%\n\tnf: {(probab_nf * 100):.3G}%")
         elif opcao == 2:
             print("Para determinar parametros da caixa e da particula:")
 
