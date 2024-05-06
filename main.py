@@ -26,13 +26,13 @@ def menu_nav():
     print("\nSelecione a entrada:\n\n\t1 - Determinar funcao de onda quantica e demais parametros;\n\t2 - Determinar parametros da particula e caixa a partir da funcao de onda\n\t3 - Encerrar programa")
 
 def calcula_parametros_funcao_onda(largura_caixa, num_quantico):
-    amplitude = math.sqrt((2) / (largura_caixa * 1E-9))
-    num_onda = (num_quantico * pi) / (largura_caixa * 1E-9)
+    amplitude = math.sqrt((2) / (largura_caixa))
+    num_onda = (num_quantico * pi) / (largura_caixa)
 
     return amplitude, num_onda
 
 def plota_graficos_func_onda(amplitude_ni, amplitude_nf, num_onda_ni, num_onda_nf, largura_caixa, n_inicial, n_final):
-    x = np.linspace(0, (largura_caixa * 1E-9), 150)
+    x = np.linspace(0, (largura_caixa), 150)
 
     fig, eixo = plt.subplots(1,2, sharey = True, figsize=(12,6))
 
@@ -55,7 +55,7 @@ def plota_graficos_func_onda(amplitude_ni, amplitude_nf, num_onda_ni, num_onda_n
     plt.close()
 
 def plota_graficos_distr_probabilidade(amplitude_ni, amplitude_nf, num_onda_ni, num_onda_nf, largura_caixa, n_inicial, n_final):
-    x = np.linspace(0, (largura_caixa * 1E-9), 150)
+    x = np.linspace(0, (largura_caixa), 150)
 
     fig, eixo = plt.subplots(1,2, sharey = True, figsize=(12,6))
 
@@ -78,11 +78,11 @@ def plota_graficos_distr_probabilidade(amplitude_ni, amplitude_nf, num_onda_ni, 
     plt.close()
     
 def calcula_energia_particula(largura_caixa, num_quantico, tipo_particula):
-    energia_joule = (math.pow(num_quantico, 2) * math.pow(cte_plank_joule, 2)) / (8 * math.pow(largura_caixa * 1E-9, 2) * massa_eletron)
+    energia_joule = (math.pow(num_quantico, 2) * math.pow(cte_plank_joule, 2)) / (8 * math.pow(largura_caixa, 2) * massa_eletron)
 
     # se particula confinada for proton
     if tipo_particula == 2:
-        energia_joule = (math.pow(num_quantico, 2) * math.pow(cte_plank_joule, 2)) / (8 * math.pow(largura_caixa * 1E-9, 2) * massa_proton)
+        energia_joule = (math.pow(num_quantico, 2) * math.pow(cte_plank_joule, 2)) / (8 * math.pow(largura_caixa, 2) * massa_proton)
 
     return energia_joule
 
@@ -123,6 +123,17 @@ def calcula_comprimento_onda_broglie(velocidade, massa_particula):
     compr = cte_plank_joule / (massa_particula * velocidade)
 
     return compr
+
+def converte_medida(medida, tipo_conversao):
+    # converte de nanometros para metros
+    medida_convert = medida * 1E-9
+
+    # converte de metros para nanometros
+    if tipo_conversao == 'nm':
+        medida_convert = medida / 1E-9
+
+    return medida_convert
+
 def main():
     imprime_tela_inicial()
 
@@ -149,6 +160,10 @@ def main():
                     print("coordenada fora dos limites da caixa, por favor digite novamente.")
                 else:
                     break
+            
+            largura_caixa = converte_medida(largura_caixa, 'm')
+            coord_a = converte_medida(coord_a, 'm')
+            coord_b = converte_medida(coord_b, 'm')
 
             tipo_particula = int(input("particula a ser confinada:\n\t1 - eletron\n\t2 - proton\nopcao:"))
 
@@ -177,9 +192,11 @@ def main():
 
                 comp_onda, freq_foton = calcula_comprimento_onda_freq_foton(energia_foton)
 
+                comp_onda_nm = converte_medida(comp_onda, 'nm')
+
                 print()
 
-                print(f"dados do foton {tipo.upper()}: \n\tenergia: {energia_foton:.3G} J ou {(energia_foton / 1.602e-19):.3G} eV\n\tcomprimento de onda: {comp_onda:.3G} m\n\tfrequencia: {freq_foton:.3G} Hz")
+                print(f"dados do foton {tipo.upper()}: \n\tenergia: {energia_foton:.3G} J ou {(energia_foton / 1.602e-19):.3G} eV\n\tcomprimento de onda: {comp_onda:.3G} m ou {comp_onda_nm:.3G} nm\n\tfrequencia: {freq_foton:.3G} Hz")
 
                 vel_i = calcula_velocidade_particula(energia_ni_joule, massa_eletron)
                 vel_f = calcula_velocidade_particula(energia_nf_joule, massa_eletron)
@@ -191,9 +208,12 @@ def main():
                 compr_broglie_ni = calcula_comprimento_onda_broglie(vel_i, massa_eletron)
                 compr_broglie_nf = calcula_comprimento_onda_broglie(vel_f, massa_eletron)
 
+                compr_broglie_ni_conv = converte_medida(compr_broglie_ni, 'nm')
+                compr_broglie_nf_conv = converte_medida(compr_broglie_nf, 'nm')
+
                 print()
 
-                print(f"comprimento de onda de De Broglie:\n\tni: {compr_broglie_ni:.3G} m\n\tnf:{compr_broglie_nf:.3G} m")
+                print(f"comprimento de onda de De Broglie:\n\tni: {compr_broglie_ni:.3G} m ou {compr_broglie_ni_conv:.3G} nm\n\tnf:{compr_broglie_nf:.3G} m ou {compr_broglie_nf_conv:.3G} nm")
 
             elif tipo_particula == 2:
                 energia_ni_joule = calcula_energia_particula(largura_caixa, n_inicial, 2)
@@ -210,10 +230,11 @@ def main():
                     tipo = "emitido"
 
                 comp_onda, freq_foton = calcula_comprimento_onda_freq_foton(energia_foton)
+                comp_onda_nm = converte_medida(comp_onda, 'nm')
 
                 print()
 
-                print(f"dados do foton {tipo.upper()}: \n\tenergia: {energia_foton:.3G} J.s ou {(energia_foton / 1.602e-19):.3G} eV\n\tcomprimento de onda: {comp_onda:.3G} m\n\tfrequencia: {freq_foton:.3G} Hz")
+                print(f"dados do foton {tipo.upper()}: \n\tenergia: {energia_foton:.3G} J.s ou {(energia_foton / 1.602e-19):.3G} eV\n\tcomprimento de onda: {comp_onda:.3G} m ou {comp_onda_nm:.3G} nm\n\tfrequencia: {freq_foton:.3G} Hz")
 
                 vel_i = calcula_velocidade_particula(energia_ni_joule, massa_proton)
                 vel_f = calcula_velocidade_particula(energia_nf_joule, massa_proton)
@@ -225,9 +246,12 @@ def main():
                 compr_broglie_ni = calcula_comprimento_onda_broglie(vel_i, massa_proton)
                 compr_broglie_nf = calcula_comprimento_onda_broglie(vel_f, massa_proton)
 
+                compr_broglie_ni_conv = converte_medida(compr_broglie_ni, 'nm')
+                compr_broglie_nf_conv = converte_medida(compr_broglie_nf, 'nm')
+
                 print()
 
-                print(f"comprimento de onda de De Broglie:\n\tni: {compr_broglie_ni:.3G} m\n\tnf: {compr_broglie_nf:.3G} m")
+                print(f"comprimento de onda de De Broglie:\n\tni: {compr_broglie_ni:.3G} m ou {compr_broglie_ni_conv:.3G} nm\n\tnf:{compr_broglie_nf:.3G} m ou {compr_broglie_nf_conv:.3G} nm")
 
         elif opcao == 2:
             print("Para determinar parametros da caixa e da particula:")
@@ -237,7 +261,9 @@ def main():
 
             largura, num_quantico = calcula_parametros_caixa_particula(input_amplitude, input_num_onda)
 
-            print(f"largura da caixa: {largura:.3G} m")
+            largura = converte_medida(largura, 'nm')
+
+            print(f"largura da caixa: {largura:.3G} nm")
             print(f"nivel quantico: {round(num_quantico)}")
 
         elif opcao == 3:
