@@ -64,8 +64,8 @@ def plota_graficos_distr_probabilidade(amplitude_ni, amplitude_nf, num_onda_ni, 
     eixo[0].set_ylabel("|Ψ₁|²", fontsize=16)
     eixo[1].set_ylabel("|Ψ₂|²", fontsize=16)
 
-    func_distr_probab_ni = (amplitude_ni * np.sin(num_onda_ni * x) ** 2)
-    func_distr_probab_nf = (amplitude_nf * np.sin(num_onda_nf * x) ** 2)
+    func_distr_probab_ni = (amplitude_ni ** 2) * (np.sin(num_onda_ni * x) ** 2)
+    func_distr_probab_nf = (amplitude_nf ** 2) * (np.sin(num_onda_nf * x) ** 2)
 
     plot_func_ni, = eixo[0].plot(x, func_distr_probab_ni)
     plot_func_nf, = eixo[1].plot(x, func_distr_probab_nf)
