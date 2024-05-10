@@ -1,6 +1,7 @@
 import math
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib.animation as animation
 
 massa_eletron = 9.11E-31
 massa_proton = 1.67E-27
@@ -148,6 +149,48 @@ def calculo_probab_dois_pontos(largura_caixa, num_quantico, ponto_a, ponto_b):
 
     return probab
 
+def exibe_simulacao(largura_caixa, n_inicial, n_final, tipo_particula):
+    energia_ni = calcula_energia_particula(largura_caixa, 1, tipo_particula)
+
+    fig, ax = plt.subplots(figsize=(4,6))
+    ax.set_xlim(0, largura_caixa)
+    ax.set_xlabel('largura da caixa (m)')
+    ax.set_ylim(0, math.pow(6, 2) * energia_ni)  # Definindo limite no eixo y
+    ax.set_ylabel('Energia (J)')
+    for nivel in range(1, 6):
+        ax.plot([0, largura_caixa], [math.pow(nivel, 2) * energia_ni, math.pow(nivel, 2) * energia_ni], '-', color='C0', linewidth=1)
+        fig.set_label(nivel)
+
+    particula, = ax.plot([], [], 'bo', markersize=10)
+    x = 0
+    velocidade_x = largura_caixa / 50
+    
+    def init():
+        particula.set_data([], [])
+        return particula,
+
+    def animate(frame):
+        nonlocal x, velocidade_x
+        x += velocidade_x
+        
+        
+        if frame <= 100:
+            y = math.pow(n_inicial, 2) * energia_ni
+        else:
+            y = math.pow(n_final, 2) * energia_ni            
+
+        
+        particula.set_data([x], [y])
+        # Se a partícula atingir as extremidades do poço de potencial, muda a direção
+        if x >= largura_caixa or x <= 0:
+            velocidade_x *= -1
+        return particula,
+
+
+    ani = animation.FuncAnimation(fig, animate, frames=200, interval=25, blit=True, init_func=init)
+
+    plt.show()
+
 def main():
     imprime_tela_inicial()
 
@@ -208,7 +251,7 @@ def main():
 
                 print()
 
-                print(f"comprimento de onda de De Broglie:\n\tni: {compr_broglie_ni:.3G} m ou {compr_broglie_ni_conv:.3G} nm\n\tnf:{compr_broglie_nf:.3G} m ou {compr_broglie_nf_conv:.3G} nm")
+                print(f"comprimento de onda de De Broglie:\n\tni: {compr_broglie_ni:.3G} m ou {compr_broglie_ni_conv:.3G} nm\n\tnf: {compr_broglie_nf:.3G} m ou {compr_broglie_nf_conv:.3G} nm")
 
             elif tipo_particula == 2:
                 energia_ni_joule = calcula_energia_particula(largura_caixa, n_inicial, 2)
@@ -247,6 +290,9 @@ def main():
                 print()
 
                 print(f"comprimento de onda de De Broglie:\n\tni: {compr_broglie_ni:.3G} m ou {compr_broglie_ni_conv:.3G} nm\n\tnf: {compr_broglie_nf:.3G} m ou {compr_broglie_nf_conv:.3G} nm")
+
+                
+            exibe_simulacao(largura_caixa, n_inicial, n_final, tipo_particula)
 
             print("\ngostaria de calcular a probabilidade de encontrar a particula entre 2 pontos:\n\t1 - sim\n\t2 - nao")
             opcao = int(input("opcao: "))
